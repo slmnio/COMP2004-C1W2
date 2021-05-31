@@ -1,8 +1,5 @@
-.build
-.mbed
-projectfiles
-*.py*
-mbed-os
 BUILD
-
-BMP280
+.mbed
+mbed-os
+.DS_Store
+.DS_Store
