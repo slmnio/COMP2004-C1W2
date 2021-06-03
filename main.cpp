@@ -1,6 +1,7 @@
 #include "mbed.h"
 // #include "BMP280_SPI.h"
 #include "sensors.h"
+#include "sd.h"
 
 Sensors sensors;
 EventQueue queue;

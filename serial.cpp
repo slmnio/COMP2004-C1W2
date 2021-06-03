@@ -13,7 +13,7 @@ void log(bool isCritical, string message) {
 
 void logToSerial(string prefix, string message) {
     // actual call here
-    printf("[%s] %s", prefix.c_str(), message.c_str());
+    printf("[%s] %s\n", prefix.c_str(), message.c_str());
 }
 
 void triggerRedLED() {
