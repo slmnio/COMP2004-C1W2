@@ -1,10 +1,6 @@
-# COMP2004-C1W2-2021
+# COMP2004-C1W2
 
-There are two projects in this repository:
+*Solomon Cammack - 10613265*
 
-* COMP2004_C1W2_2021
-   * Use this as your starter project 
-   * Modify as you see fit
-* DynamicWebPageExample
-   * This contains an example of creating a dynamic web page in mbed os
-   * This is taken from the lab tasks
+- using mbed v6.3
+- using the BMP280 library provided in the starter repository
