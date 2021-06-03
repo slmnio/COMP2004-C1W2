@@ -2,6 +2,7 @@
 #include "mbed.h"
 #include "sensors.h"
 #include <string>
+#include "serial.h"
 
 
 string SensorData::tempf() {
@@ -19,6 +20,8 @@ SensorData Sensors::getData() {
      // =operator -> read();
     float _t = Sensors::bmp.getTemperature();
     float _p = Sensors::bmp.getPressure();
+
+    log(false, "Sensor data read\n");
 
     return {
         _t, _p, _l

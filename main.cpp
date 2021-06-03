@@ -8,7 +8,7 @@ Thread t_data;
 
 void collectData() {
     SensorData data = sensors.getData();
-    data.print();
+    // data.print();
 }
 
 void dataThread() {
