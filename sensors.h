@@ -25,7 +25,7 @@ struct Sensors {
     public:
         Sensors() : ldr(PC_0), 
                     bmp(BMP_MOSI_PIN, BMP_MISO_PIN, BMP_SCLK_PIN, BMP_CS_PIN) 
-                    {};
+                    { bmp.initialize(); };
         SensorData getData();
 };
 
