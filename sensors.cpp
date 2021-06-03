@@ -9,6 +9,10 @@
 
 
 void Sensors::getData() {
+     // =operator -> read();
     float _p = Sensors::potentiometer;
-    printf("potentiometer: %i\n", int (_p * 1000));
+    float _l = Sensors::ldr;
+
+    // casting to int because mbed's float printf doesn't work
+    printf("potentiometer: %i | ldr: %i\n", int (_p * 1000), int (_l * 1000));
 }
