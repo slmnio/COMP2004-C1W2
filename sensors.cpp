@@ -5,7 +5,8 @@
 
 
 string SensorData::tempf() {
-    return to_string(int (floor(temperature))) + "." + to_string(int (temperature / floor(temperature))) +"C";
+    int scale = 10;
+    return to_string(int(floor(temperature * scale) / scale)) + "." + to_string(int((temperature * scale) - (floor(temperature) * 10))) + "C";
 }
 void SensorData::print() {
     // casting to int because mbed's float printf doesn't work
