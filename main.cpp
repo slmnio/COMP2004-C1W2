@@ -8,6 +8,7 @@ Thread t_data;
 
 void collectData() {
     SensorData data = sensors.getData();
+    buffer.push(data.toHumanFormat());
     // data.print();
 }
 

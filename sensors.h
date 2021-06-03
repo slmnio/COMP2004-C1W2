@@ -15,6 +15,7 @@ struct SensorData {
     float light;
     string tempf();
     void print();
+    string toHumanFormat();
 };
 
 

@@ -13,6 +13,13 @@ void SensorData::print() {
     // casting to int because mbed's float printf doesn't work
     printf("ldr: %i | temp: %s | pres: %i\n", int (light * 1000), tempf().c_str(), int (pressure * 1000));
 }
+string SensorData::toHumanFormat() {
+    char* _str;
+    sprintf(_str, "time, %i, %s, %i", int (light * 1000), tempf().c_str(), int(pressure * 1000));
+    printf("time, %i, %s, %i\n", int (light * 1000), tempf().c_str(), int(pressure * 1000));
+    printf("str: %s\n", _str);
+    return _str;
+}
 
 SensorData Sensors::getData() {
 
