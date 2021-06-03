@@ -1,18 +1,25 @@
 #include "BMP280_SPI.h"
 #include "mbed.h"
 #include "sensors.h"
-
-#define BMP280_MOSI_PIN PB_5
-#define BMP280_MISO_PIN PB_4
-#define BMP280_SCLK_PIN PB_3
-#define BMP280_CS_PIN   PB_2
+#include <string>
 
 
-void Sensors::getData() {
-     // =operator -> read();
-    float _p = Sensors::potentiometer;
-    float _l = Sensors::ldr;
-
+string SensorData::tempf() {
+    return to_string(int (floor(temperature))) + "." + to_string(int (temperature / floor(temperature))) +"C";
+}
+void SensorData::print() {
     // casting to int because mbed's float printf doesn't work
-    printf("potentiometer: %i | ldr: %i\n", int (_p * 1000), int (_l * 1000));
+    printf("ldr: %i | temp: %s | pres: %i\n", int (light * 1000), tempf().c_str(), int (pressure * 1000));
+}
+
+SensorData Sensors::getData() {
+
+    float _l = Sensors::ldr;
+     // =operator -> read();
+    float _t = Sensors::bmp.getTemperature();
+    float _p = Sensors::bmp.getPressure();
+
+    return {
+        _t, _p, _l
+    };
 }
