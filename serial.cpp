@@ -18,7 +18,7 @@ void log(bool isCritical, string message) {
 }
 
 void logToSerial(string prefix, string message) {
-    // actual call here
+    // actual serial call here
     printf("[%s] %s\n", prefix.c_str(), message.c_str());
 }
 
@@ -33,7 +33,7 @@ void ledLow() {
 }
 
 void triggerRedLED() {
-    // something about a red LED here
+    // trigger the red LED for a few seconds
     serial_queue.call(&ledHigh);
     serial_queue.call_in(3s, &ledLow);
 }

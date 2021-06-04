@@ -53,25 +53,28 @@ int send_request(char method[], char url[], char headers[], char data[]) {
         return result;
     }
 
-    SocketAddress address;
+    SocketAddress address; 
+    // DNS lookup
     result = net->gethostbyname("weather.slmn.io", &address);
 
-    char logInfo[100] = "IP of remote server: ";
-    strcat(logInfo,(address.get_ip_address()));
-    log(false, logInfo);
-
     if (result != NSAPI_ERROR_OK) {
+        // DNS error
         net->disconnect();
         // printf("Error resolving hostname %d\n", result);
         log(true, "Error resolving hostname");
         return result;
     }
 
+    char logInfo[100] = "IP of remote server: ";
+    strcat(logInfo,(address.get_ip_address())); // required as part of logging #12
+    log(false, logInfo);
+
     address.set_port(8921);
     TCPSocket socket;
 
     char buffer[1024] = "";// = "POST /data HTTP/1.1\r\nHost: weather.slmn.io\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: 30\r\n\r\ndata=poggers&no_data=unpoggers";
 
+    // basically a big builder to join all the parameters up into a valid HTTP request
     strcat(buffer, method);
     strcat(buffer, " ");
     strcat(buffer, url);
@@ -118,7 +121,9 @@ int send_request(char method[], char url[], char headers[], char data[]) {
     }
 
     char rbuffer[256];
+    // receieve data here
     int rcount = socket.recv(rbuffer, sizeof rbuffer);
+    
     // printf("recv %d [%s]\n", rcount, strstr(rbuffer, "\r\n\r\n") +4);
     // printf("[DEBUG] network: recv %d bytes\n", rcount);
     log(false, "Connected and sent data to the network");
@@ -131,20 +136,10 @@ int send_request(char method[], char url[], char headers[], char data[]) {
 }
 
 int send_data(string data) {
+    // helper function for data post
     char data_char[1024];
     strcpy(data_char, data.c_str());
     int req = send_request("POST", "/data", "Content-Type: application/x-www-form-urlencoded", data_char);
     // networkTimeout.attach(&network_timeout_call, 6s);
     return req;
 }
-
-void prefilled_request() {
-    send_request("POST", "/data", "Content-Type: application/x-www-form-urlencoded", "data=poggers");
-}
-/*
-void network_main() {
-    get_mac();
-    queue_network.call_every(5s, &prefilled_request);
-    queue_network.dispatch();
-};
-*/

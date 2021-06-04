@@ -9,30 +9,30 @@
 
 
 string SensorData::tempf() {
+    // nicer way of showing off the temperature
     char _str[64];
     sprintf(_str, "%.1fC", temperature);
     return _str;
 }
 void SensorData::print() {
-    // casting to int because mbed's float printf doesn't work
+    // helper function used sometimes
     printf("%s", this->toHumanFormat().c_str());
-    // printf("ldr: %i | temp: %s | pres: %i\n", int (light * 1000), tempf().c_str(), int (pressure));
 }
 string SensorData::toHumanFormat() {
+    // human readable (different to url encoded, could be different to SD write)
     char _str[256];
-    // sprintf(_str, "time, %i, %s, %i mbar", int (light * 1000), tempf().c_str(), int(pressure));
     sprintf(_str, "time, %.1f%%, %s, %.2f mbar", light * 100, tempf().c_str(), (pressure));
-    // printf("time, %i, %s, %i\n", int (light * 1000), tempf().c_str(), int(pressure * 1000));
-    // printf("str: %s\n", _str);
     return _str;
 }
 string SensorData::urlEncode() {
+    // not a true encode but good enough for the symbols we might encounter
     char str[256] = "";
     sprintf(str, "light=%.3f&temperature=%.1f&pressure=%.1f", light, temperature, pressure);
     return str;
 }
 
 SensorData Sensors::getData() {
+    // this is the method that reads all the pins and gets the data
     float _l = Sensors::ldr.read();
     float _t = Sensors::bmp.getTemperature();
     float _p = Sensors::bmp.getPressure();

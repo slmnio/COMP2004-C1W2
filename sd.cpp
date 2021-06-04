@@ -37,11 +37,13 @@ int sd_write(string data) {
         GreenLEDOn();
 
         if (fp == NULL) {
+            // file pointer is null if the file can't be accessed
             log(true, "Could not open the file to write to.");
             sd.deinit();
             return -1;
         }
 
+        // close everything up
         fprintf(fp, "%s", data.c_str()); // TODO: replace this with data param
         fclose(fp);
         sd.deinit();
@@ -52,6 +54,7 @@ int sd_write(string data) {
 }
 
 int FIFO_Buffer::push(SensorData item) {
+    // push a piece of data into the buffer
     // printf("[DEBUG] Waiting for semaphore...\n");
     semaphore.acquire();
     this->_buffer.push_back(item);
@@ -71,6 +74,7 @@ SensorData FIFO_Buffer::unshift() {
 }
 
 string FIFO_Buffer::flush() {
+    // flush all items and get a string of their human readable contents
     string data = "";
     log(false, "Flushing " + to_string(this->size()) + " items");
 

@@ -57,15 +57,18 @@ void sd_main() {
 
 EventQueue network_queue;
 void network_main() {  
+void network_main() {
+    // EventQueue to keep the server updated
     network_queue.call_every(10s, sendDataToServer);
     network_queue.dispatch();
 }
 
-Thread t_serial_control;
-BufferedSerial pc_serial(USBTX, USBRX);
+Thread t_serial_control; // separate thread for serial controller
+BufferedSerial pc_serial(USBTX, USBRX); // PC USB serial control
 
 int run_command(char command[]) {
     printf("[DEBUG] RUN COMMAND %s\n", command);
+    // checks each command to see if they match (strcmp == 0) and runs command and returns
     if (strcmp(command, "READ NOW") == 0) {
         printf("[COMMAND] Latest record: %s\n", sensors.lastData.toHumanFormat().c_str());
         return 0;
@@ -85,17 +88,14 @@ int run_command(char command[]) {
 }
 
 void serial_control() {
-    
+    // basic serial control setup
     pc_serial.set_baud(9600);
-    pc_serial.set_format(
-        /* bits */ 8,
-        /* parity */ BufferedSerial::None,
-        /* stop bit */ 1
-    );
+    pc_serial.set_format(8, BufferedSerial::None, 1);
     char command[64] = {0};
     char buf[32] = {0};
 
     while (true) {
+        // capture user input
          if (uint32_t num = pc_serial.read(buf, sizeof(buf))) {
             // Echo the input back to the terminal.
             pc_serial.write(buf, num);
@@ -103,7 +103,7 @@ void serial_control() {
             switch (buf[0]) {
                 case 0x7f:
                     // backspace
-                    // something with a \0;
+                    // todo: something with a \0? overwrite last
                     break;
                 case 0x0d:
                     // enter
@@ -119,6 +119,7 @@ void serial_control() {
 
 
 int main() {
+    // Start off all threads
     t_data.start(callback(&dataThread));
     t_sd.start(callback(&sd_main));
     t_net.start(callback(&network_main));
