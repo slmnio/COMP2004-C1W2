@@ -1,3 +1,5 @@
+/* COMP2004-W2 - Solomon Cammack (solo) - 10613265 */
+
 #include "BMP280_SPI.h"
 #include "mbed.h"
 #include "sensors.h"

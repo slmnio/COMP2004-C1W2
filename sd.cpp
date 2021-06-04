@@ -1,3 +1,5 @@
+/* COMP2004-W2 - Solomon Cammack (solo) - 10613265 */
+
 #include "sd.h"
 #include "serial.h"
 #include "sensors.h"

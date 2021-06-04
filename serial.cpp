@@ -1,3 +1,5 @@
+/* COMP2004-W2 - Solomon Cammack (solo) - 10613265 */
+
 #include "serial.h"
 
 void log(bool isCritical, string message) {

@@ -1,3 +1,5 @@
+/* COMP2004-W2 - Solomon Cammack (solo) - 10613265 */
+
 #include "mbed.h"
 // #include "BMP280_SPI.h"
 #include "sensors.h"
@@ -71,10 +73,8 @@ int main() {
 
     t_data.start(callback(&dataThread));
     t_sd.start(callback(&sd_main));
-
     t_net.start(callback(&network_main));
     
-
     return 0;
 }
 

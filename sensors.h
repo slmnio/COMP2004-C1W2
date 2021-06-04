@@ -1,3 +1,5 @@
+/* COMP2004-W2 - Solomon Cammack (solo) - 10613265 */
+
 #ifndef MBED_SLMN_SENSORS
 #define MBED_SLMN_SENSORS
 #include <string>
