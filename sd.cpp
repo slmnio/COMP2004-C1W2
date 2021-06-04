@@ -4,13 +4,35 @@
 #include "sd.h"
 #include "serial.h"
 #include "sensors.h"
+#include "SDBlockDevice.h"
+#include "FATFileSystem.h"
+
+SDBlockDevice sd(PB_5, PB_4, PB_3, PF_3);
+// PF_4 / ADC3IN14 / SD_CD is SD detect interrupt
 
 int sd_write(string data) {
     // printf("-- Writing to SD: --\n%s\n----\n", data.c_str());
 
-    ThisThread::sleep_for(5000ms);
-    printf("[DEBUG] SD write completed.\n");
-    return 1;
+
+    if (sd.init() != 0) {
+        log(true, "SD card init failed");
+        return -1;
+    }
+
+    FATFileSystem fs("sd", &sd);
+    FILE *fp = fopen("/sd/data.txt", "w"); // file pointer
+
+    if (fp == NULL) {
+        log(true, "Could not open the file to write to.");
+        sd.deinit();
+        return -1;
+    }
+
+    fprintf(fp, "%s", data.c_str()); // TODO: replace this with data param
+    fclose(fp);
+    log(false, "Data written to file.");
+    sd.deinit();
+    return 0;
 }
 
 int FIFO_Buffer::push(SensorData item) {
