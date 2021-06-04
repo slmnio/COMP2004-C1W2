@@ -9,6 +9,14 @@
 NetworkInterface *net = NetworkInterface::get_default_instance();
 
 EventQueue queue_network;
+Timeout networkTimeout;
+
+void network_timeout_call() {
+    if (net) {
+        net->disconnect();
+        log(true, "Network timeout");
+    }
+}
 
 
 extern "C" void mbed_mac_address(char *mac);
@@ -124,7 +132,9 @@ int send_request(char method[], char url[], char headers[], char data[]) {
 int send_data(string data) {
     char data_char[1024];
     strcpy(data_char, data.c_str());
-    return send_request("POST", "/data", "Content-Type: application/x-www-form-urlencoded", data_char);
+    int req = send_request("POST", "/data", "Content-Type: application/x-www-form-urlencoded", data_char);
+    // networkTimeout.attach(&network_timeout_call, 6s);
+    return req;
 }
 
 void prefilled_request() {
