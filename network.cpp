@@ -101,7 +101,7 @@ int send_request(char method[], char url[], char headers[], char data[]) {
     char rbuffer[256];
     int rcount = socket.recv(rbuffer, sizeof rbuffer);
     // printf("recv %d [%s]\n", rcount, strstr(rbuffer, "\r\n\r\n") +4);
-    printf("[DEBUG] network: recv %d\n", rcount);
+    printf("[DEBUG] network: recv %d bytes\n", rcount);
 
     socket.close();
     net->disconnect();
