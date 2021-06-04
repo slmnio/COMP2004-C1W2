@@ -44,11 +44,14 @@ void dataThread() {
 }
 
 EventQueue sd_queue;
+InterruptIn SD_Inserted(PF_4);
 void sd_main() {
     // EventQueue to flush the SD card buffer
-    sd_queue.call_every(20s, &buffer_sd_flush);
+    SD_Inserted.rise(sd_queue.event(buffer_sd_flush));
+    sd_queue.call_every(1min, &buffer_sd_flush);
     sd_queue.dispatch();
 }
+
 
 EventQueue network_queue;
 void network_main() {  

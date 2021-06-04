@@ -22,5 +22,6 @@ struct FIFO_Buffer {
     int size();
 };
 
+void sd_core_main();
 
 #endif
