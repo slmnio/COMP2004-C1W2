@@ -114,13 +114,14 @@ int send_request(char method[], char url[], char headers[], char data[]) {
             return 1;
         }
         size -= result;
-        printf("[DEBUG] network: sent %d bytes\n", result);
+        // printf("[DEBUG] network: sent %d bytes\n", result);
     }
 
     char rbuffer[256];
     int rcount = socket.recv(rbuffer, sizeof rbuffer);
     // printf("recv %d [%s]\n", rcount, strstr(rbuffer, "\r\n\r\n") +4);
-    printf("[DEBUG] network: recv %d bytes\n", rcount);
+    // printf("[DEBUG] network: recv %d bytes\n", rcount);
+    log(false, "Connected and sent data to the network");
 
     socket.close();
     net->disconnect();

@@ -2,6 +2,7 @@
 /* Serial communications: handles logging and serial interface (#12) */
 
 #include "serial.h"
+#include "mbed.h"
 
 EventQueue serial_queue;
 

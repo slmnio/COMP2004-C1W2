@@ -6,7 +6,7 @@
 #include "mbed.h"
 #include "string"
 
-static bool loggingEnabled = true;
+static bool loggingEnabled = false;
 
 void log(bool isCritical = false, string message = "");
 void logToSerial(string prefix, string message);
