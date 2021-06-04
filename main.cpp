@@ -5,6 +5,7 @@
 #include "sensors.h"
 #include "sd.h"
 #include "network.h"
+#include "serial.h"
 
 Sensors sensors;
 Thread t_data;
@@ -63,6 +64,7 @@ int main() {
     t_data.start(callback(&dataThread));
     t_sd.start(callback(&sd_main));
     t_net.start(callback(&network_main));
+    serial_external_main();
     
     return 0;
 }

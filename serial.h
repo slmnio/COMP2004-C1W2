@@ -12,6 +12,7 @@ void log(bool isCritical = false, string message = "");
 void logToSerial(string prefix, string message);
 
 void triggerRedLED();
+void serial_external_main();
 
 
 #endif
