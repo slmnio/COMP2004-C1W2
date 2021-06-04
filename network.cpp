@@ -24,7 +24,8 @@ int get_mac() {
 int send_request(char method[], char url[], char headers[], char data[]) {
     printf("[DEBUG] network: service starting\n");
     if (!net) {
-        printf("Error! No network inteface found.\n");
+        // printf("Error! No network inteface found.\n");
+        log(true, "Error: no network interface");
         return 1;
     }
     
@@ -33,7 +34,8 @@ int send_request(char method[], char url[], char headers[], char data[]) {
     result = net->connect();
 
     if (result != NSAPI_ERROR_OK) {
-        printf("Error! net->connect() returned: %d\n", result);
+        // printf("Error! net->connect() returned: %d\n", result);
+        log(true, "Error opening network connection");
         net->disconnect();
         return result;
     }
@@ -47,7 +49,8 @@ int send_request(char method[], char url[], char headers[], char data[]) {
 
     if (result != NSAPI_ERROR_OK) {
         net->disconnect();
-        printf("Error resolving hostname %d\n", result);
+        // printf("Error resolving hostname %d\n", result);
+        log(true, "Error resolving hostname");
         return result;
     }
 
@@ -77,11 +80,13 @@ int send_request(char method[], char url[], char headers[], char data[]) {
     // printf("%s", "post buffer-print");
 
     if (socket.open(net) != 0) {
-        printf("socket open error");
+        // printf("socket open error");
+        log(true, "Socket open error");
     }
 
     if (socket.connect(address) != 0) {
-        printf("socket connection error");
+        // printf("socket connection error");
+        log(true, "Socket connection error");
     }
 
     nsapi_size_t size = strlen(buffer);
@@ -89,7 +94,8 @@ int send_request(char method[], char url[], char headers[], char data[]) {
         result = socket.send(buffer+result, size);
 
         if (result < 0) {
-            printf("Error! socket.send() returned: %d\n", result);
+            // printf("Error! socket.send() returned: %d\n", result);
+            log(true, "Socket send error");
             socket.close();
             net->disconnect();
             return 1;
