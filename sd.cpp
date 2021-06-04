@@ -1,4 +1,5 @@
 /* COMP2004-W2 - Solomon Cammack (solo) - 10613265 */
+/* SD card file: handles the write buffer & SD read/write */
 
 #include "sd.h"
 #include "serial.h"

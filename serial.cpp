@@ -1,4 +1,5 @@
 /* COMP2004-W2 - Solomon Cammack (solo) - 10613265 */
+/* Serial communications: handles logging and serial interface (#12) */
 
 #include "serial.h"
 

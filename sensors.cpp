@@ -1,4 +1,5 @@
 /* COMP2004-W2 - Solomon Cammack (solo) - 10613265 */
+/* Sensors: reads and formats sensor data */
 
 #include "BMP280_SPI.h"
 #include "mbed.h"

@@ -1,4 +1,5 @@
 /* COMP2004-W2 - Solomon Cammack (solo) - 10613265 */
+/* Main: co-ordinate and launch threads */
 
 #include "mbed.h"
 // #include "BMP280_SPI.h"
