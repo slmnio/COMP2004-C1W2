@@ -25,7 +25,6 @@ string SensorData::toHumanFormat() {
 }
 
 SensorData Sensors::getData() {
-
     float _l = Sensors::ldr.read();
     float _t = Sensors::bmp.getTemperature();
     float _p = Sensors::bmp.getPressure();

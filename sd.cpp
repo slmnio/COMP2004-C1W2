@@ -3,7 +3,7 @@
 #include "sensors.h"
 
 int sd_write(string data) {
-    printf("-- Writing to SD: --\n%s\n----\n", data.c_str());
+    // printf("-- Writing to SD: --\n%s\n----\n", data.c_str());
 
     ThisThread::sleep_for(5000ms);
     printf("[DEBUG] SD write completed.\n");
@@ -52,7 +52,7 @@ SensorData FIFO_Buffer::unshift() {
 
 string FIFO_Buffer::flush() {
     string data;
-    log(false, "Flushing " + to_string(this->size()) + " items\n");
+    log(false, "Flushing " + to_string(this->size()) + " items");
 
     while (!this->_buffer.empty()) {
         string latestData = unshift().toHumanFormat();
@@ -64,7 +64,7 @@ string FIFO_Buffer::flush() {
 
 int FIFO_Buffer::sd_flush() {
     // flush buffer onto the SD card 
-    printf("[DEBUG] sd_flush %i", this->size());
+    // printf("[DEBUG] sd_flush %i\n", this->size());
 
     // printf("[DEBUG] Waiting for semaphore...\n");
     semaphore.acquire();
@@ -79,7 +79,3 @@ int FIFO_Buffer::sd_flush() {
 
     return -1;
 }
-
-
-
-

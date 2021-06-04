@@ -34,7 +34,6 @@ void dataThread() {
     // t_sd.start(callback(&sd_main));
 
     queue.call_every(1s, collectData);
-    // queue.call_every(10s, buffer_sd_flush);
     queue.dispatch();
 
 }
@@ -43,7 +42,7 @@ EventQueue sd_queue;
 
 void sd_main() {
     printf("[DEBUG] SD thread started\n");
-    // should be 1m
+    // should be 1min+, lower here for testing.
     sd_queue.call_every(20s, &buffer_sd_flush);
     sd_queue.dispatch();
 }
