@@ -5,7 +5,7 @@
 #include "datetime.h"
 #include <iostream>
 
-int main() {
+int datetime_main() {
     cout << "hi";
     while (true) {
         // wait for button to start 
