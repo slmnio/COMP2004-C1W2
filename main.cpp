@@ -122,7 +122,7 @@ int main() {
     t_data.start(callback(&dataThread));
     t_sd.start(callback(&sd_main));
     t_net.start(callback(&network_main));
-    /*t_serial.start(&*/serial_external_main()/*)*/;
+    serial_external_main();
     t_serial_control.start(callback(&serial_control));
     
     return 0;
