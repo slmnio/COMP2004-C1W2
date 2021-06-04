@@ -6,16 +6,19 @@
 
 
 string SensorData::tempf() {
-    int scale = 10;
-    return to_string(int(floor(temperature * scale) / scale)) + "." + to_string(int((temperature * scale) - (floor(temperature) * 10))) + "C";
+    char _str[64];
+    sprintf(_str, "%.1fC", temperature);
+    return _str;
 }
 void SensorData::print() {
     // casting to int because mbed's float printf doesn't work
-    printf("ldr: %i | temp: %s | pres: %i\n", int (light * 1000), tempf().c_str(), int (pressure * 1000));
+    printf("%s", this->toHumanFormat().c_str());
+    // printf("ldr: %i | temp: %s | pres: %i\n", int (light * 1000), tempf().c_str(), int (pressure));
 }
 string SensorData::toHumanFormat() {
     char _str[128];
-    sprintf(_str, "time, %i, %s, %i", int (light * 1000), tempf().c_str(), int(pressure * 1000));
+    // sprintf(_str, "time, %i, %s, %i mbar", int (light * 1000), tempf().c_str(), int(pressure));
+    sprintf(_str, "time, %i%%, %s, %.2f mbar", light * 100, tempf().c_str(), (pressure));
     // printf("time, %i, %s, %i\n", int (light * 1000), tempf().c_str(), int(pressure * 1000));
     // printf("str: %s\n", _str);
     return _str;
