@@ -2,17 +2,23 @@
 #define MBED_SLMN_SD
 
 #include "mbed.h"
+#include "sensors.h"
 #include <string>
+#include <deque>
 
 int sd_write(string data);
 
 struct FIFO_Buffer {
-    string _buffer[64];
-    int index = 0;
-    int push(string item);
-    int unshift(string item);
+    // I'm not sure if deque is allowed, but I'll build around it and can replace it if needed.
+    std::deque<SensorData> _buffer;
+    Semaphore semaphore{1};
+    int push(SensorData item);
+    SensorData unshift();
+
+    string flush();
+    int sd_flush();
+    int size();
 };
 
-static FIFO_Buffer buffer;
 
 #endif

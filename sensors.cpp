@@ -14,10 +14,10 @@ void SensorData::print() {
     printf("ldr: %i | temp: %s | pres: %i\n", int (light * 1000), tempf().c_str(), int (pressure * 1000));
 }
 string SensorData::toHumanFormat() {
-    char* _str;
+    char _str[128];
     sprintf(_str, "time, %i, %s, %i", int (light * 1000), tempf().c_str(), int(pressure * 1000));
-    printf("time, %i, %s, %i\n", int (light * 1000), tempf().c_str(), int(pressure * 1000));
-    printf("str: %s\n", _str);
+    // printf("time, %i, %s, %i\n", int (light * 1000), tempf().c_str(), int(pressure * 1000));
+    // printf("str: %s\n", _str);
     return _str;
 }
 
@@ -28,7 +28,7 @@ SensorData Sensors::getData() {
     float _t = Sensors::bmp.getTemperature();
     float _p = Sensors::bmp.getPressure();
 
-    log(false, "Sensor data read\n");
+    log(false, "Sensor data read");
 
     return {
         _t, _p, _l
