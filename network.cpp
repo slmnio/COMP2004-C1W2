@@ -25,16 +25,18 @@ int get_mac() {
  
 
 int send_request(char method[], char url[], char headers[], char data[]) {
-    printf("[DEBUG] network: service starting\n");
+    printf("[DEBUG] network: request starting\n");
+
     if (!net) {
-        // printf("Error! No network inteface found.\n");
+        // check if network device is attached;
         log(true, "Error: no network interface");
         return 1;
     }
     
     int result;
-
     result = net->connect();
+
+    // NSAPI_ERROR_OK = no error, so these check if there's no error
 
     if (result != NSAPI_ERROR_OK) {
         // printf("Error! net->connect() returned: %d\n", result);
