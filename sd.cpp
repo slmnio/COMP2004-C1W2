@@ -10,9 +10,13 @@
 SDBlockDevice sd(PB_5, PB_4, PB_3, PF_3);
 // PF_4 / ADC3IN14 / SD_CD is SD detect interrupt
 
+DigitalOut GreenLED(LED2);
+void GreenLEDOn() { GreenLED = 1; }
+void GreenLEDOff() { GreenLED = 0; }
+
 int sd_write(string data) {
     // Can set mocking to true if the SD cards continue to mess up.
-    bool mocking = true;
+    bool mocking = false;
 
     if (mocking) {
         // Pretending that the SD writing is doing something
@@ -23,11 +27,14 @@ int sd_write(string data) {
         // Real SD code
         if (sd.init() != 0) {
             log(true, "SD card init failed");
+            sd.deinit();
             return -1;
         }
 
         FATFileSystem fs("sd", &sd);
         FILE *fp = fopen("/sd/data.txt", "w"); // file pointer
+        // mounted 
+        GreenLEDOn();
 
         if (fp == NULL) {
             log(true, "Could not open the file to write to.");
@@ -45,30 +52,9 @@ int sd_write(string data) {
 }
 
 int FIFO_Buffer::push(SensorData item) {
-    // add to buffer
-    // printf("buffer req: %s\n", item.c_str());
-    // printf("current size: %i\n", sizeof(FIFO_Buffer::_buffer));
-/*
-    if (FIFO_Buffer::_buffer[FIFO_Buffer::index] == 0)  {
-        // overlap
-        log(true, "Buffer overlap");
-        return -1;
-    }
-*/
-
     // printf("[DEBUG] Waiting for semaphore...\n");
     semaphore.acquire();
-    // printf("[DEBUG] Received semaphore.\n");
-
     this->_buffer.push_back(item);
-    // printf("[DEBUG] ->_: _ size is %i\n", size()); // works
-    // printf("[DEBUG] ->_: buffer size is %i\n", buffer.size()); // doesn't
-    // printf("[DEBUG] ->push: buffer size is %i\n", this->_buffer.size()); // works
-    // printf("[DEBUG] buffer->buffer size is %i\n", buffer._buffer.size()); // doesn't
-    // printf("[DEBUG] buffer is now size %i\n", _buffer.size());
-
-    // FIFO_Buffer::_buffer[FIFO_Buffer::index] = item;
-    // FIFO_Buffer::index++;
     semaphore.release();
     return 0;
 }
@@ -106,10 +92,9 @@ int FIFO_Buffer::sd_flush() {
     string data = this->flush();
     semaphore.release();
 
-    sd_write(data);
-
-    // printf("%s", flush().c_str());
-
-
-    return -1;
+    int write_attempt = sd_write(data);
+    if (write_attempt != 0) {
+        GreenLEDOff();
+    }
+    return write_attempt;
 }

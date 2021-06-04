@@ -34,7 +34,7 @@ void ledLow() {
 void triggerRedLED() {
     // something about a red LED here
     serial_queue.call(&ledHigh);
-    serial_queue.call_in(1s, &ledLow);
+    serial_queue.call_in(3s, &ledLow);
 }
 
 Thread t_serial;
