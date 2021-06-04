@@ -11,6 +11,7 @@ Sensors sensors;
 Thread t_data;
 Thread t_sd;
 Thread t_net;
+//Thread t_serial;
 
 FIFO_Buffer buffer;
 
@@ -60,11 +61,69 @@ void network_main() {
     network_queue.dispatch();
 }
 
+Thread t_serial_control;
+BufferedSerial pc_serial(USBTX, USBRX);
+
+int run_command(char command[]) {
+    printf("[DEBUG] RUN COMMAND %s\n", command);
+    if (strcmp(command, "READ NOW") == 0) {
+        printf("[COMMAND] Latest record: %s\n", sensors.lastData.toHumanFormat().c_str());
+        return 0;
+    }
+    if (strcmp(command, "SD F") == 0) {
+        printf("[COMMAND] Flushing SD card\n");
+        sd_queue.call(buffer_sd_flush);
+        return 0;
+    }
+    if (strcmp(command, "NET UPDATE") == 0) {
+        printf("[COMMAND] Forcing a new network update\n");
+        network_queue.call(sendDataToServer);
+        return 0;
+    }
+    printf("[COMMAND] Unrecognised command\n");
+    return -1;
+}
+
+void serial_control() {
+    
+    pc_serial.set_baud(9600);
+    pc_serial.set_format(
+        /* bits */ 8,
+        /* parity */ BufferedSerial::None,
+        /* stop bit */ 1
+    );
+    char command[64] = {0};
+    char buf[32] = {0};
+
+    while (true) {
+         if (uint32_t num = pc_serial.read(buf, sizeof(buf))) {
+            // Echo the input back to the terminal.
+            pc_serial.write(buf, num);
+
+            switch (buf[0]) {
+                case 0x7f:
+                    // backspace
+                    // something with a \0;
+                    break;
+                case 0x0d:
+                    // enter
+                    run_command(command);
+                    memset(command, 0, sizeof command);
+                    break;
+                default:
+                    strcat(command, buf);
+            }
+        }
+    }
+}
+
+
 int main() {
     t_data.start(callback(&dataThread));
     t_sd.start(callback(&sd_main));
     t_net.start(callback(&network_main));
-    serial_external_main();
+    /*t_serial.start(&*/serial_external_main()/*)*/;
+    t_serial_control.start(callback(&serial_control));
     
     return 0;
 }
