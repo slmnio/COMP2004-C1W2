@@ -16,6 +16,7 @@ struct SensorData {
     string tempf();
     void print();
     string toHumanFormat();
+    string urlEncode();
 };
 
 
@@ -28,6 +29,7 @@ struct Sensors {
                     bmp(BMP_MOSI_PIN, BMP_MISO_PIN, BMP_SCLK_PIN, BMP_CS_PIN) 
                     { bmp.initialize(); };
         SensorData getData();
+        SensorData lastData;
 };
 
 #endif

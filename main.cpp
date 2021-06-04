@@ -2,11 +2,13 @@
 // #include "BMP280_SPI.h"
 #include "sensors.h"
 #include "sd.h"
+#include "network.h"
 
 Sensors sensors;
 EventQueue queue;
 Thread t_data;
 Thread t_sd;
+Thread t_net;
 
 FIFO_Buffer buffer;
 
@@ -47,10 +49,33 @@ void sd_main() {
     sd_queue.dispatch();
 }
 
+void sendDataToServer() {
+    // every x seconds this is called. get data from sensors and pass it to the server
+
+    // get sensor data
+    string data = sensors.lastData.urlEncode();
+    
+    // send data to server
+    send_data(data);
+
+}
+
+EventQueue network_queue;
+
+void network_main() {  
+    network_queue.call_every(10s, sendDataToServer);
+    network_queue.dispatch();
+}
+
 int main() {
 
     t_data.start(callback(&dataThread));
     t_sd.start(callback(&sd_main));
 
+    t_net.start(callback(&network_main));
+    
+
     return 0;
 }
+
+

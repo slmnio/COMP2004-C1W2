@@ -23,6 +23,11 @@ string SensorData::toHumanFormat() {
     // printf("str: %s\n", _str);
     return _str;
 }
+string SensorData::urlEncode() {
+    char str[256] = "";
+    sprintf(str, "time=time&light=%.1f&temperature=%.1f&pressure=%.1f", light, temperature, pressure);
+    return str;
+}
 
 SensorData Sensors::getData() {
     float _l = Sensors::ldr.read();
@@ -31,7 +36,8 @@ SensorData Sensors::getData() {
 
     log(false, "Sensor data read");
 
-    return {
+    lastData = {
         _t, _p, _l
     };
+    return lastData;
 }
