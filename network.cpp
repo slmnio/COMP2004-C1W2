@@ -1,5 +1,7 @@
 #include "mbed.h"
 #include "sensors.h"
+#include "serial.h"
+#include <string>
 
 NetworkInterface *net = NetworkInterface::get_default_instance();
 
@@ -19,70 +21,8 @@ int get_mac() {
 }
  
 
-int send_req() {
-    printf("network service starting\n");
-    if (!net) {
-        printf("Error! No network inteface found.\n");
-        return 1;
-    }
-    
-    int result;
-
-    result = net->connect();
-
-    if (result != NSAPI_ERROR_OK) {
-        printf("Error! net->connect() returned: %d\n", result);
-        return result;
-    }
-
-    SocketAddress address;
-    result = net->gethostbyname("weather.slmn.io", &address);
-    if (result != NSAPI_ERROR_OK) {
-        printf("Error resolving hostname %d\n", result);
-        return result;
-    }
-
-    address.set_port(8921);
-    TCPSocket socket;
-
-    char buffer[] = "GET / HTTP/1.1\r\nHost: weather.slmn.io\r\n\r\n";
-
-    if (socket.open(net) != 0) {
-        printf("socket open error");
-    }
-
-    if (socket.connect(address) != 0) {
-        printf("socket connection error");
-    }
-
-    nsapi_size_t size = strlen(buffer);
-     while(size) {
-        result = socket.send(buffer+result, size);
-
-        if (result < 0) {
-            printf("Error! socket.send() returned: %d\n", result);
-            return 1;
-        }
-        size -= result;
-        printf("sent %d [%.*s]\n", result, strstr(buffer, "\r\n")-buffer, buffer);
-    }
-
-    char rbuffer[256];
-    int rcount = socket.recv(rbuffer, sizeof rbuffer);
-    printf("recv %d [%s]\n", rcount, strstr(rbuffer, "\r\n\r\n") +4);
-    // printf("%s", strstr(rbuffer, "\r\n\r\n") +4);
-
-    socket.close();
-    net->disconnect();
-
-
-
-
-    return 0;
-}
-
 int send_request(char method[], char url[], char headers[], char data[]) {
- printf("network service starting\n");
+    printf("[DEBUG] network: service starting\n");
     if (!net) {
         printf("Error! No network inteface found.\n");
         return 1;
@@ -94,12 +34,19 @@ int send_request(char method[], char url[], char headers[], char data[]) {
 
     if (result != NSAPI_ERROR_OK) {
         printf("Error! net->connect() returned: %d\n", result);
+        net->disconnect();
         return result;
     }
 
     SocketAddress address;
     result = net->gethostbyname("weather.slmn.io", &address);
+
+    char logInfo[100] = "IP of remote server: ";
+    strcat(logInfo,(address.get_ip_address()));
+    log(false, logInfo);
+
     if (result != NSAPI_ERROR_OK) {
+        net->disconnect();
         printf("Error resolving hostname %d\n", result);
         return result;
     }
@@ -125,7 +72,7 @@ int send_request(char method[], char url[], char headers[], char data[]) {
 
     // printf("%s", "pre-buffer-print");
 
-    printf("%s", buffer);
+    // printf("%s", buffer);
 
     // printf("%s", "post buffer-print");
 
@@ -143,16 +90,18 @@ int send_request(char method[], char url[], char headers[], char data[]) {
 
         if (result < 0) {
             printf("Error! socket.send() returned: %d\n", result);
+            socket.close();
+            net->disconnect();
             return 1;
         }
         size -= result;
-        printf("sent %d [%.*s]\n", result, strstr(buffer, "\r\n")-buffer, buffer);
+        printf("[DEBUG] network: sent %d bytes\n", result);
     }
 
     char rbuffer[256];
     int rcount = socket.recv(rbuffer, sizeof rbuffer);
     // printf("recv %d [%s]\n", rcount, strstr(rbuffer, "\r\n\r\n") +4);
-    printf("recv %d\n", rcount);
+    printf("[DEBUG] network: recv %d\n", rcount);
 
     socket.close();
     net->disconnect();
