@@ -56,7 +56,6 @@ void sd_main() {
 
 
 EventQueue network_queue;
-void network_main() {  
 void network_main() {
     // EventQueue to keep the server updated
     network_queue.call_every(10s, sendDataToServer);
