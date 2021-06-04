@@ -25,7 +25,7 @@ string SensorData::toHumanFormat() {
 }
 string SensorData::urlEncode() {
     char str[256] = "";
-    sprintf(str, "time=time&light=%.3f&temperature=%.1f&pressure=%.1f", light, temperature, pressure);
+    sprintf(str, "light=%.3f&temperature=%.1f&pressure=%.1f", light, temperature, pressure);
     return str;
 }
 
