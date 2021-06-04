@@ -16,9 +16,9 @@ void SensorData::print() {
     // printf("ldr: %i | temp: %s | pres: %i\n", int (light * 1000), tempf().c_str(), int (pressure));
 }
 string SensorData::toHumanFormat() {
-    char _str[128];
+    char _str[256];
     // sprintf(_str, "time, %i, %s, %i mbar", int (light * 1000), tempf().c_str(), int(pressure));
-    sprintf(_str, "time, %i%%, %s, %.2f mbar", light * 100, tempf().c_str(), (pressure));
+    sprintf(_str, "time, %.1f%%, %s, %.2f mbar", light * 100, tempf().c_str(), (pressure));
     // printf("time, %i, %s, %i\n", int (light * 1000), tempf().c_str(), int(pressure * 1000));
     // printf("str: %s\n", _str);
     return _str;
